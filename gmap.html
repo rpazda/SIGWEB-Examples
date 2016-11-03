@@ -1,0 +1,112 @@
+<DOCTYPE! html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+	<head>
+		<meta name="author" content="Richard Pazda" />
+		
+		
+		<!-- jQuery -->
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js"
+			  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+			  crossorigin="anonymous">
+		</script>
+		
+		<!--BootStrap CDN-->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"></link>
+		
+		<!--FontAwesome-->
+		<script src="https://use.fontawesome.com/808114f81f.js"></script>
+		
+		<style>
+
+			#map {
+				height: 100%;
+				width: 100%;
+			}
+
+		</style>
+
+	</head>
+
+	<body >
+		
+		<div class="container-fluid">
+		
+			<div class="row">
+				
+				<div id='map' style="height: 600px;">
+					<!--Empty div for map to be added-->
+				</div>
+			
+				<script>
+					function initMap() {
+						
+						var uniLocation = {lat: 28.587801, lng: -81.199363};	//Select a location by coord
+						//change to center on uni latlong
+						var mapDiv = document.getElementById('map');	//Find div for map
+						var map = new google.maps.Map(mapDiv, {			//Create map in map div, pass in properties
+							center: uniLocation,
+							zoom: 11
+						});
+						marker = new google.maps.Marker({position: uniLocation, map: map});	//Create new marker on the map
+						//var infoWindow = new google.maps.InfoWindow({map: map});
+						
+						position = marker.getPosition().toString();	//Put position data of marker into var for use
+						$("#currentPosition").html(position);
+						
+						//infoWindow.setPosition(position);
+						//infoWindow.setContent(position);
+						
+						///Creates a single marker at a time. New marker clears old marker
+						google.maps.event.addListener(map, 'click', function(event) {	//Listen for event and perform function
+							marker.setMap(null);		//clear previous marker
+							marker = new google.maps.Marker({position: event.latLng, map: map});	//Add new marker
+							position = marker.getPosition().toString();	//Put position data of marker into var for use
+							
+							
+							//var infoWindow = new google.maps.InfoWindow({map: map});
+							
+							//infoWindow.setPosition(position);
+							//infoWindow.setContent(position);
+							
+							$("#currentPosition").html(position);
+							
+							/*$.ajax({
+							  type: 'POST',
+							  url: 'createEvent.php',
+							  data: position,
+							  success: success,
+							  dataType: double
+							})*/
+						});
+					}
+				
+				</script>
+				
+				<script async defer
+					src='https://maps.googleapis.com/maps/api/js?key=AIzaSyA4J3mXl9mgqJGlQ1YgbDgqRMEbJDOc8pg&callback=initMap'>
+				</script>
+				
+			</div>
+			
+			<div class="row" style="margin-top: 20px;">
+				
+				<div class="col-md-6 col-md-offset-3">
+				
+					<div class="well">
+					
+						<p>
+							Current Postion: <div id="currentPosition"></div>
+						</p>
+					
+					</div>
+				
+			</div>
+			
+		</div>
+		
+	</body>
+	
+</html>
+
